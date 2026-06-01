@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "OgnevSport — Сайт-візитка виробника тренажерів",
+  "entry": "ognevsport-site.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-05-31T19:17:33.880Z",
+  "updatedAt": "2026-05-31T19:17:33.923Z",
+  "sourceSkillId": "magazine-web-ppt",
+  "designSystemId": "claude",
+  "metadata": {
+    "identifier": "ognevsport-site",
+    "artifactType": "text/html",
+    "inferred": false
+  }
+}

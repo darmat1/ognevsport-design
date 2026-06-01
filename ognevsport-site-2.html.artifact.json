@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "kind": "html",
+  "title": "OgnevSport — с темой, дропдауном языка и формой",
+  "entry": "ognevsport-site-2.html",
+  "renderer": "html",
+  "status": "complete",
+  "exports": [
+    "html",
+    "pdf",
+    "zip"
+  ],
+  "createdAt": "2026-05-31T19:57:41.939Z",
+  "updatedAt": "2026-05-31T19:57:41.962Z",
+  "sourceSkillId": "magazine-web-ppt",
+  "designSystemId": "claude",
+  "metadata": {
+    "identifier": "ognevsport-site",
+    "artifactType": "text/html",
+    "inferred": false
+  }
+}

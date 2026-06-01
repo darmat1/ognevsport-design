@@ -1,0 +1,431 @@
+
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OgnevSport — Виробник тренажерів</title>
+<meta name="description" content="Виробник спортивних тренажерів для залів. Армрестлинг, пауерліфтинг, кросфіт.">
+<style>
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#0f0e0d;--sf:#1c1917;--sf2:#252219;--fg:#f0ebe3;--mu:#7a7068;
+  --br:#2e2821;--ac:#e85800;--ach:#ff6b1a;--acd:rgba(232,88,0,.12);
+  --nav-bg:rgba(15,14,13,.92);--nav:64px;
+}
+[data-theme="light"]{
+  --bg:#f3f0e8;--sf:#ffffff;--sf2:#ece8df;--fg:#1a1916;--mu:#6b6560;
+  --br:#ddd9cf;--nav-bg:rgba(243,240,232,.94);
+}
+html{scroll-behavior:smooth}
+body{background:var(--bg);color:var(--fg);font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',system-ui,sans-serif;font-size:16px;line-height:1.6;min-height:100vh;transition:background .2s,color .2s}
+img{display:block;max-width:100%}
+button{cursor:pointer;font-family:inherit}
+a{color:inherit;text-decoration:none}
+
+nav{position:fixed;top:0;left:0;right:0;z-index:200;height:var(--nav);background:var(--nav-bg);backdrop-filter:blur(16px);border-bottom:1px solid var(--br);display:flex;align-items:center;padding:0 28px;gap:16px}
+.wm{font-size:1.2rem;font-weight:800;letter-spacing:-.03em;flex-shrink:0;cursor:pointer;user-select:none}
+.wm .o{color:var(--ac)}.wm .s{color:var(--fg)}
+.nc{display:flex;gap:2px;flex:1}
+.nb{padding:7px 13px;border-radius:6px;font-size:.875rem;font-weight:500;background:none;border:none;color:var(--mu);transition:color .15s,background .15s}
+.nb:hover{color:var(--fg);background:var(--sf)}
+.nb.on{color:var(--fg);background:var(--sf2)}
+.theme-btn{background:none;border:none;color:var(--mu);padding:7px;border-radius:6px;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:color .15s,background .15s}
+.theme-btn:hover{color:var(--fg);background:var(--sf)}
+.ldrop{position:relative;flex-shrink:0}
+.ldrop-btn{display:flex;align-items:center;gap:5px;padding:6px 10px;border-radius:6px;font-size:.75rem;font-weight:700;letter-spacing:.06em;background:none;border:1px solid var(--br);color:var(--fg);text-transform:uppercase;cursor:pointer;transition:border-color .15s,background .15s}
+.ldrop-btn:hover{border-color:var(--mu);background:var(--sf)}
+.ldrop-ch{display:flex;transition:transform .2s}
+.ldrop-btn.open .ldrop-ch{transform:rotate(180deg)}
+.ldrop-panel{position:absolute;right:0;top:calc(100% + 7px);background:var(--sf);border:1px solid var(--br);border-radius:10px;padding:4px;min-width:152px;display:none;z-index:300;box-shadow:0 8px 28px rgba(0,0,0,.22)}
+.ldrop-panel.open{display:block}
+.ldrop-item{display:flex;align-items:center;justify-content:space-between;width:100%;padding:9px 12px;border-radius:6px;font-size:.85rem;background:none;border:none;color:var(--fg);cursor:pointer;transition:background .1s;text-align:left}
+.ldrop-item:hover{background:var(--sf2)}
+.ldrop-item.on{color:var(--ac);font-weight:600}
+.ldrop-code{font-size:.68rem;font-weight:700;letter-spacing:.07em;color:var(--mu);text-transform:uppercase}
+.ldrop-item.on .ldrop-code{color:var(--ac)}
+.hbg{display:none;background:none;border:none;color:var(--fg);padding:6px;margin-left:auto;flex-shrink:0}
+.mob-menu{display:none;position:fixed;top:var(--nav);left:0;right:0;background:var(--bg);border-bottom:1px solid var(--br);padding:12px 20px 16px;flex-direction:column;gap:2px;z-index:150}
+.mob-menu.open{display:flex}
+.mob-menu .nb{text-align:left;padding:10px 12px;font-size:.95rem}
+.mob-sep{height:1px;background:var(--br);margin:6px 0}
+.mob-lang-items{display:flex;flex-direction:column;gap:2px}
+.mob-lang-item{padding:9px 12px;border-radius:6px;font-size:.88rem;background:none;border:none;color:var(--mu);cursor:pointer;text-align:left;transition:color .15s,background .15s}
+.mob-lang-item:hover{color:var(--fg);background:var(--sf)}
+.mob-lang-item.on{color:var(--ac);font-weight:600}
+.mob-theme-item{display:flex;align-items:center;gap:9px;padding:9px 12px;border-radius:6px;font-size:.88rem;background:none;border:none;color:var(--mu);cursor:pointer;text-align:left;transition:color .15s,background .15s;width:100%}
+.mob-theme-item:hover{color:var(--fg);background:var(--sf)}
+#app{padding-top:var(--nav);min-height:100vh}
+.page{display:none}.page.on{display:block}
+.btn-p{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:var(--ac);color:#fff;border-radius:9px;font-weight:600;font-size:.92rem;border:none;transition:background .2s,transform .15s}
+.btn-p:hover{background:var(--ach);transform:translateY(-1px)}
+.btn-s{display:inline-flex;align-items:center;gap:8px;padding:12px 22px;background:var(--sf);color:var(--fg);border-radius:9px;font-weight:500;font-size:.92rem;border:1px solid var(--br);transition:background .2s,border-color .2s}
+.btn-s:hover{background:var(--sf2);border-color:var(--mu)}
+.hero{padding:72px 28px 60px;max-width:1160px;margin:0 auto;display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:center;min-height:calc(100vh - var(--nav))}
+.hero-ey{display:inline-flex;align-items:center;gap:7px;padding:5px 12px;background:var(--acd);border:1px solid rgba(232,88,0,.25);border-radius:100px;font-size:.72rem;font-weight:700;color:var(--ac);letter-spacing:.06em;text-transform:uppercase;margin-bottom:22px}
+.hero-h{font-family:Georgia,serif;font-size:clamp(2.2rem,3.8vw,3.4rem);font-weight:400;line-height:1.1;letter-spacing:-.02em;margin-bottom:18px}
+.hero-sub{font-size:1.02rem;color:var(--mu);line-height:1.68;margin-bottom:34px;max-width:430px}
+.hero-act{display:flex;gap:10px;flex-wrap:wrap}
+.hero-vis{display:grid;grid-template-columns:1fr 1fr;grid-template-rows:220px 160px;gap:10px}
+.h-img{border-radius:14px;overflow:hidden;background:var(--sf)}
+.h-img img{width:100%;height:100%;object-fit:cover}
+.h-img:first-child{grid-column:span 2}
+.stats-b{background:var(--sf);border-top:1px solid var(--br);border-bottom:1px solid var(--br);padding:30px 28px}
+.stats-in{max-width:1160px;margin:0 auto;display:grid;grid-template-columns:repeat(4,1fr);gap:24px}
+.st{text-align:center}
+.st-nb{font-family:Georgia,serif;font-size:2rem;font-weight:400;color:var(--ac);line-height:1;margin-bottom:5px}
+.st-lb{font-size:.78rem;color:var(--mu);line-height:1.4;white-space:pre-line}
+.about-s{padding:72px 28px;max-width:1160px;margin:0 auto;display:grid;grid-template-columns:1fr 1.5fr;gap:72px;align-items:start}
+.ab-l{font-size:.7rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--ac);margin-bottom:14px}
+.ab-h{font-family:Georgia,serif;font-size:clamp(1.55rem,2.4vw,2.1rem);font-weight:400;line-height:1.22;letter-spacing:-.01em}
+.ab-p{color:var(--mu);font-size:.97rem;line-height:1.72;margin-bottom:18px}
+.ab-p:last-child{margin-bottom:0}
+.feats{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:28px}
+.fc{background:var(--sf);border:1px solid var(--br);border-radius:14px;padding:20px}
+.fc-ic{width:38px;height:38px;background:var(--acd);border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--ac);margin-bottom:12px}
+.fc-nm{font-weight:600;font-size:.88rem;margin-bottom:5px}
+.fc-de{font-size:.78rem;color:var(--mu);line-height:1.45}
+.sec{padding:56px 28px;max-width:1160px;margin:0 auto}
+.sec-hd{display:flex;align-items:baseline;justify-content:space-between;margin-bottom:28px}
+.sec-t{font-family:Georgia,serif;font-size:1.75rem;font-weight:400;letter-spacing:-.015em}
+.sec-lk{font-size:.85rem;color:var(--ac);font-weight:500;background:none;border:none;transition:color .15s}
+.sec-lk:hover{color:var(--ach);text-decoration:underline}
+.pgrid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.pcard{background:var(--sf);border:1px solid var(--br);border-radius:14px;overflow:hidden;cursor:pointer;transition:border-color .2s,transform .2s;display:flex;flex-direction:column}
+.pcard:hover{border-color:rgba(232,88,0,.45);transform:translateY(-2px)}
+.pc-img{aspect-ratio:4/3;overflow:hidden;background:var(--sf2);flex-shrink:0}
+.pc-img img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.pcard:hover .pc-img img{transform:scale(1.04)}
+.pc-body{padding:18px;flex:1;display:flex;flex-direction:column}
+.pc-nm{font-weight:600;font-size:.92rem;line-height:1.35;margin-bottom:7px}
+.pc-ds{font-size:.78rem;color:var(--mu);line-height:1.5;flex:1;margin-bottom:14px;display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
+.pc-ft{display:flex;align-items:center;justify-content:space-between}
+.pc-pr{font-weight:700;font-size:.97rem;color:var(--ac)}
+.pc-ar{width:30px;height:30px;border-radius:50%;background:var(--sf2);border:1px solid var(--br);display:flex;align-items:center;justify-content:center;color:var(--mu);font-size:.75rem;transition:background .2s,color .2s,border-color .2s;flex-shrink:0}
+.pcard:hover .pc-ar{background:var(--ac);border-color:var(--ac);color:#fff}
+.eq-hd{padding:56px 28px 36px;max-width:1160px;margin:0 auto}
+.eq-t{font-family:Georgia,serif;font-size:clamp(1.9rem,3vw,2.7rem);font-weight:400;letter-spacing:-.02em;margin-bottom:10px}
+.eq-s{font-size:.97rem;color:var(--mu)}
+.eq-gr{padding:0 28px 72px;max-width:1160px;margin:0 auto}
+.det{padding:44px 28px 72px;max-width:1160px;margin:0 auto}
+.bc{display:flex;align-items:center;gap:8px;font-size:.8rem;color:var(--mu);margin-bottom:34px;flex-wrap:wrap}
+.bc button{background:none;border:none;color:var(--mu);font-size:.8rem;transition:color .15s}
+.bc button:hover{color:var(--fg)}
+.bc .sep{color:var(--br);user-select:none}
+.det-gr{display:grid;grid-template-columns:1fr .9fr;gap:56px;align-items:start}
+.gal{position:sticky;top:calc(var(--nav) + 20px)}
+.gal-main{aspect-ratio:4/3;border-radius:14px;overflow:hidden;background:var(--sf);margin-bottom:9px}
+.gal-main img{width:100%;height:100%;object-fit:cover;transition:opacity .2s}
+.gal-th{display:flex;gap:7px;flex-wrap:wrap}
+.g-th{width:calc(25% - 6px);aspect-ratio:1;border-radius:7px;overflow:hidden;background:var(--sf);cursor:pointer;border:2px solid transparent;transition:border-color .15s;flex-shrink:0}
+.g-th.on{border-color:var(--ac)}
+.g-th img{width:100%;height:100%;object-fit:cover}
+.det-bdg{display:inline-flex;align-items:center;gap:6px;padding:4px 10px;background:var(--acd);border:1px solid rgba(232,88,0,.2);border-radius:100px;font-size:.68rem;font-weight:700;color:var(--ac);text-transform:uppercase;letter-spacing:.06em;margin-bottom:14px}
+.det-nm{font-family:Georgia,serif;font-size:clamp(1.45rem,2.3vw,1.95rem);font-weight:400;line-height:1.2;letter-spacing:-.015em;margin-bottom:18px}
+.det-pr{font-size:1.75rem;font-weight:700;color:var(--ac);margin-bottom:26px;line-height:1}
+.det-de{color:var(--mu);line-height:1.72;font-size:.93rem;margin-bottom:28px}
+.det-de p{margin-bottom:11px}
+.det-div{height:1px;background:var(--br);margin:24px 0}
+.det-fl{list-style:none;display:flex;flex-direction:column;gap:9px;margin-bottom:28px}
+.det-fl li{display:flex;align-items:flex-start;gap:10px;font-size:.85rem;color:var(--mu)}
+.det-fl li::before{content:'';display:block;width:18px;height:18px;flex-shrink:0;margin-top:1px;background:url("data:image/svg+xml,%3Csvg width='18' height='18' viewBox='0 0 18 18' fill='none' xmlns='http://www.w3.org/2000/svg'%3E%3Ccircle cx='9' cy='9' r='8.5' stroke='%23e85800' stroke-opacity='.25'/%3E%3Cpath d='M5.5 9l2.5 2.5 4.5-5' stroke='%23e85800' stroke-width='1.5' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E")}
+.det-cta{display:flex;flex-direction:column;gap:10px}
+.det-cta .btn-p{justify-content:center;padding:14px 22px;font-size:.97rem}
+.det-cta .btn-s{justify-content:center}
+.det-note{font-size:.75rem;color:var(--mu);text-align:center;margin-top:2px;line-height:1.45}
+.con-wrap{max-width:1100px;margin:0 auto;padding:56px 28px 72px;display:grid;grid-template-columns:1fr 1.2fr;gap:64px;align-items:start}
+.con-left{position:sticky;top:calc(var(--nav) + 24px)}
+.con-t{font-family:Georgia,serif;font-size:clamp(1.8rem,2.8vw,2.4rem);font-weight:400;letter-spacing:-.02em;margin-bottom:13px}
+.con-s{font-size:.97rem;color:var(--mu);margin-bottom:28px;line-height:1.65}
+.con-pts{display:flex;flex-direction:column;gap:14px;margin-bottom:28px}
+.cp{display:flex;align-items:flex-start;gap:12px}
+.cp-ic{width:36px;height:36px;flex-shrink:0;border-radius:8px;background:var(--acd);display:flex;align-items:center;justify-content:center;color:var(--ac)}
+.cp-t{font-weight:600;font-size:.88rem;margin-bottom:2px}
+.cp-d{font-size:.78rem;color:var(--mu)}
+.cform{background:var(--sf);border:1px solid var(--br);border-radius:16px;padding:28px 32px}
+.cf-group{margin-bottom:18px}
+.cf-lb{display:block;font-size:.8rem;font-weight:600;margin-bottom:7px;letter-spacing:.01em}
+.cf-inp{width:100%;padding:11px 14px;background:var(--bg);border:1.5px solid var(--br);border-radius:9px;font-size:.93rem;color:var(--fg);font-family:inherit;transition:border-color .2s,box-shadow .2s;outline:none}
+.cf-inp:focus{border-color:var(--ac);box-shadow:0 0 0 3px var(--acd)}
+.cf-inp::placeholder{color:var(--mu)}
+.cf-inp.err{border-color:#c0392b}
+.cf-ta{resize:vertical;min-height:96px}
+.cf-radios{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.cr{position:relative}
+.cr input[type=radio]{position:absolute;opacity:0;pointer-events:none}
+.cr label{display:flex;align-items:center;gap:8px;padding:10px 14px;border:1.5px solid var(--br);border-radius:8px;cursor:pointer;font-size:.85rem;transition:border-color .15s,background .15s;user-select:none}
+.cr label:hover{border-color:var(--mu)}
+.cr input[type=radio]:checked+label{border-color:var(--ac);background:var(--acd);color:var(--ac);font-weight:600}
+.cr-dot{width:14px;height:14px;border-radius:50%;border:2px solid var(--br);flex-shrink:0;transition:border-color .15s,background .15s}
+.cr input[type=radio]:checked+label .cr-dot{border-color:var(--ac);background:var(--ac)}
+.cf-submit{width:100%;justify-content:center;padding:14px;font-size:.97rem;margin-top:6px}
+.cf-success{text-align:center;padding:48px 20px}
+.cf-ok-ic{width:56px;height:56px;border-radius:50%;background:var(--acd);display:flex;align-items:center;justify-content:center;color:var(--ac);margin:0 auto 18px}
+.cf-ok-t{font-family:Georgia,serif;font-size:1.25rem;font-weight:400;margin-bottom:8px}
+.cf-ok-s{font-size:.88rem;color:var(--mu);line-height:1.55}
+footer{background:var(--sf);border-top:1px solid var(--br);padding:28px}
+.ft-in{max-width:1160px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+.ft-cp{font-size:.78rem;color:var(--mu)}
+.ft-nav{display:flex;gap:20px}
+.ft-nav button{background:none;border:none;font-size:.78rem;color:var(--mu);transition:color .15s}
+.ft-nav button:hover{color:var(--fg)}
+@media(max-width:920px){
+  .hero{grid-template-columns:1fr;min-height:auto;padding:48px 28px 40px;gap:36px}
+  .hero-vis{display:none}.hero-sub{max-width:100%}
+  .stats-in{grid-template-columns:repeat(2,1fr)}
+  .about-s{grid-template-columns:1fr;gap:28px}
+  .feats{grid-template-columns:1fr 1fr}
+  .pgrid{grid-template-columns:repeat(2,1fr)}
+  .det-gr{grid-template-columns:1fr;gap:36px}.gal{position:static}
+  .con-wrap{grid-template-columns:1fr;gap:36px}.con-left{position:static}
+}
+@media(max-width:600px){
+  nav{padding:0 16px;gap:8px}
+  .nc,.ldrop,.theme-btn{display:none}
+  .hbg{display:flex}
+  .hero{padding:36px 16px 32px}
+  .stats-b{padding:24px 16px}.stats-in{gap:16px}
+  .about-s,.sec,.eq-hd,.eq-gr,.det,.con-wrap{padding-left:16px;padding-right:16px}
+  .pgrid{grid-template-columns:1fr}.feats{grid-template-columns:1fr}
+  .ft-in{flex-direction:column;text-align:center;gap:10px}
+  .det{padding:28px 16px 56px}.cform{padding:20px}
+}
+</style>
+</head>
+<body>
+<nav>
+  <div class="wm" onclick="goto('home')"><span class="o">Ognev</span><span class="s">Sport</span></div>
+  <div class="nc">
+    <button class="nb" data-page="home" onclick="goto('home')"></button>
+    <button class="nb" data-page="equipment" onclick="goto('equipment')"></button>
+    <button class="nb" data-page="contacts" onclick="goto('contacts')"></button>
+  </div>
+  <button class="theme-btn" id="theme-btn" onclick="toggleTheme()" aria-label="Toggle theme">
+    <svg id="theme-icon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></svg>
+  </button>
+  <div class="ldrop">
+    <button class="ldrop-btn" id="ldrop-btn" onclick="toggleLangDrop()" aria-label="Language">
+      <span id="ldrop-cur">UA</span>
+      <span class="ldrop-ch"><svg width="11" height="11" viewBox="0 0 11 11" fill="none"><path d="M2 3.5l3.5 3.5 3.5-3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+    </button>
+    <div class="ldrop-panel" id="ldrop-panel">
+      <button class="ldrop-item" data-l="ua" onclick="setLang('ua');closeLangDrop()"><span>Українська</span><span class="ldrop-code">UA</span></button>
+      <button class="ldrop-item" data-l="en" onclick="setLang('en');closeLangDrop()"><span>English</span><span class="ldrop-code">EN</span></button>
+      <button class="ldrop-item" data-l="ru" onclick="setLang('ru');closeLangDrop()"><span>Русский</span><span class="ldrop-code">RU</span></button>
+    </div>
+  </div>
+  <button class="hbg" onclick="toggleMob()" aria-label="Menu">
+    <svg width="22" height="22" viewBox="0 0 22 22" fill="none"><path d="M3 6h16M3 11h16M3 16h16" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/></svg>
+  </button>
+</nav>
+<div class="mob-menu" id="mob">
+  <button class="nb" data-page="home" onclick="goto('home');closeMob()"></button>
+  <button class="nb" data-page="equipment" onclick="goto('equipment');closeMob()"></button>
+  <button class="nb" data-page="contacts" onclick="goto('contacts');closeMob()"></button>
+  <div class="mob-sep"></div>
+  <div class="mob-lang-items">
+    <button class="mob-lang-item" data-ml="ua" onclick="setLang('ua');closeMob()">Українська</button>
+    <button class="mob-lang-item" data-ml="en" onclick="setLang('en');closeMob()">English</button>
+    <button class="mob-lang-item" data-ml="ru" onclick="setLang('ru');closeMob()">Русский</button>
+  </div>
+  <div class="mob-sep"></div>
+  <button class="mob-theme-item" id="mob-theme-item" onclick="toggleTheme()">
+    <svg id="mob-theme-icon" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"></svg>
+    <span id="mob-theme-label"></span>
+  </button>
+</div>
+<div id="app">
+<div id="pg-home" class="page">
+  <div class="hero">
+    <div class="hero-text">
+      <div class="hero-ey"><svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="5" stroke="currentColor" stroke-width="1.5"/><path d="M6 3v3l2 1.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg><span id="h-ey"></span></div>
+      <h1 class="hero-h" id="h-title"></h1>
+      <p class="hero-sub" id="h-sub"></p>
+      <div class="hero-act">
+        <button class="btn-p" onclick="goto('equipment')" id="h-cta"></button>
+        <button class="btn-s" onclick="goto('contacts')" id="h-cta2"></button>
+      </div>
+    </div>
+    <div class="hero-vis">
+      <div class="h-img"><img src="https://ireland.apollo.olxcdn.com:443/v1/files/pc3cf0kotvgu3-UA/image" alt="" loading="lazy"></div>
+      <div class="h-img"><img src="https://ireland.apollo.olxcdn.com:443/v1/files/bpibf63o5c39-UA/image" alt="" loading="lazy"></div>
+      <div class="h-img"><img src="https://ireland.apollo.olxcdn.com:443/v1/files/d1zzqxpc3jpv-UA/image" alt="" loading="lazy"></div>
+    </div>
+  </div>
+  <div class="stats-b"><div class="stats-in" id="stats-row"></div></div>
+  <div class="about-s">
+    <div><div class="ab-l" id="ab-label"></div><h2 class="ab-h" id="ab-title"></h2></div>
+    <div><p class="ab-p" id="ab-p1"></p><p class="ab-p" id="ab-p2"></p><div class="feats" id="feats-row"></div></div>
+  </div>
+  <div class="sec">
+    <div class="sec-hd"><span class="sec-t" id="feat-title"></span><button class="sec-lk" onclick="goto('equipment')" id="feat-lk"></button></div>
+    <div class="pgrid" id="home-products"></div>
+  </div>
+</div>
+<div id="pg-equipment" class="page">
+  <div class="eq-hd"><h1 class="eq-t" id="eq-title"></h1><p class="eq-s" id="eq-sub"></p></div>
+  <div class="eq-gr"><div class="pgrid" id="all-products"></div></div>
+</div>
+<div id="pg-product" class="page">
+  <div class="det">
+    <div class="bc">
+      <button onclick="goto('home')" id="bc-home"></button><span class="sep">›</span>
+      <button onclick="goto('equipment')" id="bc-equip"></button><span class="sep">›</span>
+      <span id="bc-name"></span>
+    </div>
+    <div class="det-gr">
+      <div class="gal">
+        <div class="gal-main"><img id="gal-main-img" src="" alt=""></div>
+        <div class="gal-th" id="gal-thumbs"></div>
+      </div>
+      <div class="det-inf">
+        <div class="det-bdg" id="det-badge"></div>
+        <h1 class="det-nm" id="det-name"></h1>
+        <div class="det-pr" id="det-price"></div>
+        <div class="det-de" id="det-desc"></div>
+        <div class="det-div"></div>
+        <ul class="det-fl" id="det-feats"></ul>
+        <div class="det-cta">
+          <button class="btn-p" id="det-order" onclick="goto('contacts')"></button>
+          <a class="btn-s" id="det-olx" target="_blank" rel="noopener">OLX ↗</a>
+        </div>
+        <p class="det-note" id="det-custom"></p>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="pg-contacts" class="page">
+  <div class="con-wrap">
+    <div class="con-left">
+      <div class="ab-l" id="con-badge"></div>
+      <h1 class="con-t" id="con-title"></h1>
+      <p class="con-s" id="con-sub"></p>
+      <div class="con-pts" id="con-pts"></div>
+      <a class="btn-s" href="https://www.olx.ua/uk/list/user/1S1sH/" target="_blank" rel="noopener" id="con-olx-btn" style="width:fit-content"></a>
+    </div>
+    <div class="con-right">
+      <form class="cform" id="cform" novalidate>
+        <div class="cf-success" id="cf-success" style="display:none">
+          <div class="cf-ok-ic"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg></div>
+          <div class="cf-ok-t" id="cf-ok-t"></div>
+          <div class="cf-ok-s" id="cf-ok-s"></div>
+        </div>
+        <div id="cf-fields">
+          <div class="cf-group"><label class="cf-lb" id="cf-lb-name" for="cf-name"></label><input class="cf-inp" id="cf-name" type="text" autocomplete="name" oninput="this.classList.remove('err')"></div>
+          <div class="cf-group"><label class="cf-lb" id="cf-lb-phone" for="cf-phone"></label><input class="cf-inp" id="cf-phone" type="tel" autocomplete="tel" oninput="this.classList.remove('err')"></div>
+          <div class="cf-group"><label class="cf-lb" id="cf-lb-method"></label><div class="cf-radios" id="cf-methods"></div></div>
+          <div class="cf-group"><label class="cf-lb" id="cf-lb-msg" for="cf-msg"></label><textarea class="cf-inp cf-ta" id="cf-msg" rows="4"></textarea></div>
+          <button class="btn-p cf-submit" id="cf-submit" type="button" onclick="submitForm()"></button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+</div>
+<footer>
+  <div class="ft-in">
+    <span class="ft-cp" id="ft-copy"></span>
+    <div class="ft-nav"><button onclick="goto('home')" id="ft-home"></button><button onclick="goto('equipment')" id="ft-equip"></button><button onclick="goto('contacts')" id="ft-con"></button></div>
+  </div>
+</footer>
+<script>
+const T={ua:{nav:{home:'Головна',eq:'Тренажери',con:'Контакти'},hero:{ey:'Власне виробництво',h:'Тренажери для залів і клубів',sub:'Проектуємо та виготовляємо спортивне обладнання для армрестлингу, пауерліфтингу та кросфіту. Під ваш дизайн та бюджет.',cta:'Переглянути тренажери',cta2:'Зв\'язатись'},stats:[{nb:'6+',lb:'Видів тренажерів\nу каталозі'},{nb:'100%',lb:'Власне\nвиробництво'},{nb:'Під замовлення',lb:'Будь-який дизайн\nта колір'},{nb:'ЗСУ',lb:'Частина виручки\nна підтримку'}],ab:{lb:'Про компанію',h:'Виробляємо обладнання для серйозних тренувань',p1:'OgnevSport — виробник спортивного обладнання для залів, армрестлингу, пауерліфтингу та кросфіту. Ми не посередники — кожен тренажер виготовляємо самостійно на власному виробництві.',p2:'Для кожного замовника — індивідуальне виготовлення: ваш колір, ваш дизайн, ваші параметри. Якісні матеріали, порошкове покриття, деталі з нержавіючої сталі.'},feats:[{nm:'Власне виробництво',de:'Контроль якості на кожному етапі'},{nm:'Індивідуальний підхід',de:'Під ваш колір та дизайн залу'},{nm:'Широкий асортимент',de:'Армрестлинг, жим, кросфіт, ягодиці'}],feat:{t:'Популярні тренажери',lk:'Весь каталог →'},eq:{t:'Каталог тренажерів',s:'Власне виробництво. Індивідуальне замовлення під ваш проект.'},con:{badge:'Зв\'язок',t:'Зв\'яжіться з нами',s:'Готові відповісти на запитання та підібрати тренажер під ваші потреби',pts:[{t:'Швидка відповідь',d:'Зв\'яжемося протягом дня'},{t:'Без посередників',d:'Прямий зв\'язок з виробником'},{t:'Будь-яке замовлення',d:'Розглянемо індивідуальні запити'}],olx:'Переглянути на OLX',form:{name:'Ваше ім\'я',namePh:'Іван',phone:'Номер телефону',phonePh:'+380 67 ___ __ __',method:'Зручний спосіб зв\'язку',methods:['Дзвінок','Telegram','Viber','WhatsApp'],msg:'Повідомлення',msgPh:'Який тренажер вас цікавить?',submit:'Відправити заявку',ok:'Дякуємо!',okSub:'Ваша заявка прийнята. Зв\'яжемося найближчим часом.'}},prod:{bdg:'Власне виробництво',frm:'від',uah:'грн',ord:'Замовити тренажер',cust:'Можливе виготовлення під ваш дизайн та кольорову схему',bhome:'Головна',beq:'Тренажери'},foot:'© 2025 OgnevSport. Виробник тренажерів.',theme:{toLight:'Світла тема',toDark:'Темна тема'}},ru:{nav:{home:'Главная',eq:'Тренажёры',con:'Контакты'},hero:{ey:'Собственное производство',h:'Тренажёры для залов и клубов',sub:'Проектируем и изготавливаем спортивное оборудование для армрестлинга, пауэрлифтинга и кроссфита. Под ваш дизайн и бюджет.',cta:'Смотреть тренажёры',cta2:'Связаться'},stats:[{nb:'6+',lb:'Видов тренажёров\nв каталоге'},{nb:'100%',lb:'Собственное\nпроизводство'},{nb:'По заказу',lb:'Любой дизайн\nи цвет'},{nb:'ЗСУ',lb:'Часть выручки\nна поддержку'}],ab:{lb:'О компании',h:'Производим оборудование для серьёзных тренировок',p1:'OgnevSport — производитель спортивного оборудования для залов, армрестлинга, пауэрлифтинга и кроссфита. Мы не посредники — каждый тренажёр изготавливаем на собственном производстве.',p2:'Для каждого заказчика — индивидуальное изготовление: ваш цвет, ваш дизайн, ваши параметры. Качественные материалы, порошковое покрытие, детали из нержавеющей стали.'},feats:[{nm:'Собственное производство',de:'Контроль качества на каждом этапе'},{nm:'Индивидуальный подход',de:'Под ваш цвет и дизайн зала'},{nm:'Широкий ассортимент',de:'Армрестлинг, жим, кроссфит, ягодицы'}],feat:{t:'Популярные тренажёры',lk:'Весь каталог →'},eq:{t:'Каталог тренажёров',s:'Собственное производство. Индивидуальный заказ под ваш проект.'},con:{badge:'Контакт',t:'Свяжитесь с нами',s:'Готовы ответить на вопросы и подобрать тренажёр под ваши нужды',pts:[{t:'Быстрый ответ',d:'Свяжемся в течение дня'},{t:'Без посредников',d:'Прямой контакт с производителем'},{t:'Любой заказ',d:'Рассмотрим индивидуальные запросы'}],olx:'Смотреть на OLX',form:{name:'Ваше имя',namePh:'Иван',phone:'Номер телефона',phonePh:'+380 67 ___ __ __',method:'Удобный способ связи',methods:['Звонок','Telegram','Viber','WhatsApp'],msg:'Сообщение',msgPh:'Какой тренажёр вас интересует?',submit:'Отправить заявку',ok:'Спасибо!',okSub:'Ваша заявка принята. Свяжемся в ближайшее время.'}},prod:{bdg:'Собственное производство',frm:'от',uah:'грн',ord:'Заказать тренажёр',cust:'Возможно изготовление под ваш дизайн и цветовую схему',bhome:'Главная',beq:'Тренажёры'},foot:'© 2025 OgnevSport. Производитель тренажёров.',theme:{toLight:'Светлая тема',toDark:'Тёмная тема'}},en:{nav:{home:'Home',eq:'Equipment',con:'Contacts'},hero:{ey:'In-house manufacturing',h:'Custom Gym Equipment',sub:'We design and manufacture sports equipment for armwrestling, powerlifting, and CrossFit. Matched to your design and budget.',cta:'View equipment',cta2:'Contact us'},stats:[{nb:'6+',lb:'Equipment types\nin catalog'},{nb:'100%',lb:'Own\nmanufacturing'},{nb:'Custom',lb:'Any design\nand color'},{nb:'ZSU',lb:'Part of proceeds\nto support'}],ab:{lb:'About us',h:'Manufacturing equipment for serious training',p1:'OgnevSport is a manufacturer of sports equipment for gyms, armwrestling, powerlifting, and CrossFit. We are not intermediaries — every machine is made in our own facility.',p2:'For every client — custom manufacturing: your color, your design, your specifications. Quality materials, powder coating, stainless steel components.'},feats:[{nm:'Own manufacturing',de:'Quality control at every stage'},{nm:'Custom approach',de:'Matched to your gym\'s design'},{nm:'Wide range',de:'Armwrestling, bench, CrossFit, glutes'}],feat:{t:'Featured equipment',lk:'Full catalog →'},eq:{t:'Equipment catalog',s:'In-house manufacturing. Custom orders for your project.'},con:{badge:'Contact',t:'Contact us',s:'Ready to answer your questions and help you choose the right equipment',pts:[{t:'Quick response',d:'We\'ll get back to you within the day'},{t:'Direct contact',d:'Straight to the manufacturer — no middlemen'},{t:'Any order',d:'We consider custom requests'}],olx:'View on OLX',form:{name:'Your name',namePh:'Ivan',phone:'Phone number',phonePh:'+380 67 ___ __ __',method:'Preferred contact method',methods:['Phone call','Telegram','Viber','WhatsApp'],msg:'Message',msgPh:'Which equipment are you interested in?',submit:'Send request',ok:'Thank you!',okSub:'Your request has been received. We\'ll get back to you soon.'}},prod:{bdg:'In-house manufacturing',frm:'from',uah:'UAH',ord:'Order this machine',cust:'Custom manufacturing available to match your gym\'s design and colors',bhome:'Home',beq:'Equipment'},foot:'© 2025 OgnevSport. Gym equipment manufacturer.',theme:{toLight:'Light mode',toDark:'Dark mode'}}};
+const PRODS=[{id:'crossover',price:52000,from:false,imgs:['https://ireland.apollo.olxcdn.com:443/v1/files/pc3cf0kotvgu3-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/z3o455trywsw2-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/gdiudoxfdqc31-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/4yn02zary0wn2-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/sn6txh0gk68f1-UA/image'],olx:'https://www.olx.ua/d/uk/obyavlenie/blochnaya-ramka-krossover-115kg-2-IDYWlJj.html',ua:{nm:'Блокова рамка / Кросовер 115 кг × 2',sd:'Кросовер із двома блоками по 115 кг, підшипниковими роликами та нержавіючими направляючими',de:'Кросовер із порошковим покриттям рами. Два стеки по 115 кг із фторопластовими втулками на нержавіючих направляючих. Ролики на підшипниках — плавний хід без заїдань. Поворотні вузли з пружинними фіксаторами, декілька варіантів рукояток та перекладина для підтягувань.',fl:['Два стеки по 115 кг','Фторопластові втулки на нержавіючих направляючих','Підшипникові ролики — плавний хід','Поворотні вузли з пружинними фіксаторами','Порошкове покриття рами','Виготовлення під ваш дизайн та колір']},ru:{nm:'Блочная рамка / Кроссовер 115 кг × 2',sd:'Кроссовер с двумя блоками по 115 кг, подшипниковыми роликами и нержавеющими направляющими',de:'Кроссовер с порошковым покрытием рамы. Два стека по 115 кг с фторопластовыми втулками на нержавеющих направляющих. Ролики на подшипниках — плавный ход без заеданий. Поворотные узлы с пружинными фиксаторами, несколько вариантов рукояток и перекладина для подтягиваний.',fl:['Два стека по 115 кг','Фторопластовые втулки на нержавеющих направляющих','Подшипниковые ролики — плавный ход','Поворотные узлы с пружинными фиксаторами','Порошковое покрытие рамы','Изготовление под ваш дизайн и цвет']},en:{nm:'Cable Crossover 115 kg × 2',sd:'Crossover with dual 115 kg weight stacks, ball-bearing rollers, and stainless steel guides',de:'Powder-coated cable crossover frame. Dual 115 kg weight stacks with fluoroplastic sleeves on stainless steel guides. Ball-bearing rollers ensure smooth operation. Adjustable turning nodes with spring fixators, multiple handle options and a pull-up bar included.',fl:['Dual 115 kg weight stacks','Fluoroplastic sleeves on stainless steel guides','Ball-bearing rollers for smooth operation','Adjustable turning nodes with spring fixators','Powder-coated frame','Custom design and colors available']}},{id:'delta-machine',price:43000,from:false,imgs:['https://ireland.apollo.olxcdn.com:443/v1/files/6kzk9runqycb2-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/ck58fpjqgynt3-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/8rt3sod87erm-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/0yucq65tlhlb2-UA/image'],olx:'https://www.olx.ua/d/uk/obyavlenie/trenazher-na-delty-plechi-7v-1-ID10Axyw.html',ua:{nm:'Тренажер на дельти/плечі — 7 в 1',sd:'Сім варіантів вправ для плечей та дельт в одному тренажері',de:'Багатофункціональний тренажер для плечей із сімома варіантами вправ: жим сидячи з регульованим кутом спинки, підйоми на середні дельти сидячи, підйоми на задні дельти з нахилом сидячи, підйоми на середні дельти стоячи, підйоми на передні дельти, шраги стоячи, тяга до підборіддя.',fl:['7 варіантів вправ в одному тренажері','Регульований кут спинки','Якісна набивка та нержавіюча сталь','Порошкове покриття','Виготовлення під кольори вашого залу']},ru:{nm:'Тренажёр на дельты/плечи — 7 в 1',sd:'Семь вариантов упражнений для плеч и дельт в одном тренажёре',de:'Многофункциональный тренажёр для плеч с семью вариантами упражнений: жим сидя с регулируемым углом спинки, подъёмы на средние дельты сидя, подъёмы на задние дельты с наклоном сидя, подъёмы на средние дельты стоя, подъёмы на передние дельты, шраги стоя, тяга к подбородку.',fl:['7 вариантов упражнений в одном тренажёре','Регулируемый угол спинки','Качественная набивка и нержавеющая сталь','Порошковое покрытие','Изготовление под цвета вашего зала']},en:{nm:'Shoulder & Deltoid Machine — 7-in-1',sd:'Seven exercise variations for shoulders and deltoids in one machine',de:'Multifunctional shoulder machine with 7 exercise variations: seated press with adjustable backrest angle, seated middle deltoid raises, incline seated rear deltoid raises, standing middle deltoid raises, front raises, standing shrugs, and upright rows.',fl:['7 exercise variations in one machine','Adjustable backrest angle','Quality padding and stainless steel','Powder coating','Custom colors to match your gym']}},{id:'glute-bridge',price:28000,from:false,imgs:['https://ireland.apollo.olxcdn.com:443/v1/files/d1zzqxpc3jpv-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/wkfzx3xyk12y-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/lvexquxshuhz1-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/ithlcm3hyvns3-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/wdkazxkcyo702-UA/image'],olx:'https://www.olx.ua/d/uk/obyavlenie/yagodichnyy-mostik-trenazhery-dlya-zalov-IDXux1R.html',ua:{nm:'Сідничний місток — тренажер для залів',sd:'Профільна конструкція з нержавіючими направляючими та алюмінієвими підніжками',de:'Профіль 100/50/3.2 мм (можливі інші розміри). Нержавіючі направляючі, підшипники з фторопластовими втулками. Порошкове або рідинне покриття. Якісна набивка спинки, зносостійка вінілова шкіра. Рифлені алюмінієві підніжки.',fl:['Профіль 100/50/3.2 мм','Нержавіючі направляючі з фторопластовими підшипниками','Рифлені алюмінієві підніжки','Порошкове покриття','Зносостійка вінілова шкіра','Виготовлення за вашими кресленнями']},ru:{nm:'Ягодичный мостик — тренажёр для залов',sd:'Профильная конструкция с нержавеющими направляющими и алюминиевыми подножками',de:'Профиль 100/50/3.2 мм (возможны другие размеры). Нержавеющие направляющие, подшипники с фторопластовыми втулками. Порошковое или жидкостное покрытие. Качественная набивка спинки, износостойкая виниловая кожа. Рифлёные алюминиевые подножки.',fl:['Профиль 100/50/3.2 мм','Нержавеющие направляющие с фторопластовыми подшипниками','Рифлёные алюминиевые подножки','Порошковое покрытие','Износостойкая виниловая кожа','Изготовление по вашим чертежам']},en:{nm:'Glute Bridge Machine — Gym Equipment',sd:'Structural profile with stainless steel guides and grated aluminum footplates',de:'Profile pipe 100/50/3.2 mm (alternative sizes available). Stainless steel guides with fluoroplastic sleeve bearings. Powder or spray coating. High-quality backrest padding with durable vinyl leather. Grated aluminum footplates.',fl:['100/50/3.2 mm profile pipe','Stainless steel guides with fluoroplastic bearings','Grated aluminum footplates','Powder coating','Durable vinyl leather','Custom manufacturing from your drawings']}},{id:'bench-press',price:15000,from:false,imgs:['https://ireland.apollo.olxcdn.com:443/v1/files/bpibf63o5c39-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/m497pj702e8y2-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/s25or37evuch-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/vpecm1dp25u8-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/k5ps8pqq9g2y1-UA/image'],olx:'https://www.olx.ua/d/uk/obyavlenie/stoyki-skamya-dlya-zhima-lezha-zhim-gorizontalnyy-IDVg1Zv.html',ua:{nm:'Стійки + лава для жиму лежачи',sd:'Посилені стійки для жиму лежачи з регульованими страховками та педалями',de:'Обладнання для залів, пауерліфтингу, армрестлингу та кросфіту. Посилені стійки для жиму лежачи. Деталі з нержавіючої трубки. Лава оббита якісним замінником шкіри. Штирі для зберігання блинів, регульовані страхувальні жердини з педалями.',fl:['Посилена конструкція стійок','Деталі з нержавіючої трубки','Лава з якісним замінником шкіри','Штирі для зберігання блинів','Регульовані страхувальні жердини','Педалі-страхувальники']},ru:{nm:'Стойки + скамья для жима лёжа',sd:'Усиленные стойки для жима лёжа с регулируемыми страховками и педалями',de:'Оборудование для залов, пауэрлифтинга, армрестлинга и кроссфита. Усиленные стойки для жима лёжа. Детали из нержавеющей трубки. Скамья обита качественным кожзамом. Штыри для хранения блинов, регулируемые страховочные жёрдочки с педалями.',fl:['Усиленная конструкция стоек','Детали из нержавеющей трубки','Скамья с качественным кожзамом','Штыри для хранения блинов','Регулируемые страховочные жёрдочки','Педали-страховщики']},en:{nm:'Squat Rack + Bench Press',sd:'Reinforced bench press rack with adjustable safety bars and spotter pedals',de:'Equipment for gyms, powerlifting, armwrestling, and CrossFit. Reinforced squat racks. Stainless steel tubing on exposed parts. Bench upholstered with quality vinyl leather. Weight plate storage pegs and adjustable safety bars with spotter pedals.',fl:['Reinforced rack construction','Stainless steel tubing','Quality vinyl leather bench','Weight plate storage pegs','Adjustable safety bars','Spotter pedals']}},{id:'armwrestling-table',price:9000,from:false,imgs:['https://ireland.apollo.olxcdn.com:443/v1/files/eeqasj7zyaiv1-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/6nxhlto4ey8j2-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/zqdw5j4vet7u1-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/z7vhmsxxlnub2-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/tqo6pa6cqqrx1-UA/image'],olx:'https://www.olx.ua/d/uk/obyavlenie/stol-dlya-armrestlinga-sorevnovatelnyy-usilinnyy-IDRJs34.html',ua:{nm:'Стіл для армрестлингу — змагальний посилений',sd:'Профіль 50×50 мм, гумові ніжки, 3-шарова ПВХ оббивка',de:'Змагальний стіл із посиленою конструкцією. Профільна труба 50/50 мм, ніжки діаметром 48 мм. Гумові ніжки проти ковзання. Спинні панелі на металевій основі, кріплення на баранцях. 3-шарова оббивка, ПВХ тканина преміум-класу.',fl:['Профіль 50/50 мм, ніжки 48 мм','Гумові ніжки проти ковзання','3-шарова ПВХ оббивка','Кріплення спинних панелей на баранцях','Вибір кольору фарби та тканини','Варіанти з автоматичними платформами']},ru:{nm:'Стол для армрестлинга — соревновательный усиленный',sd:'Профиль 50×50 мм, резиновые ножки, 3-слойная ПВХ обивка',de:'Соревновательный стол с усиленной конструкцией. Профильная труба 50/50 мм, ножки диаметром 48 мм. Резиновые ножки против скольжения. Спинные панели на металлической основе, крепление на барашках. 3-слойная обивка, ПВХ ткань премиум-класса.',fl:['Профиль 50/50 мм, ножки 48 мм','Резиновые ножки против скольжения','3-слойная ПВХ обивка','Крепление спинных панелей на барашках','Выбор цвета краски и ткани','Варианты с автоматическими платформами']},en:{nm:'Armwrestling Table — Competition Reinforced',sd:'50×50 mm profile, rubberized legs, triple-layer premium PVC upholstery',de:'Competition armwrestling table. 50/50 mm profile tubing and 48 mm diameter legs. Rubberized non-slip feet. Backrest panels wing-nut secured. Triple-layer upholstery with premium PVC fabric.',fl:['50/50 mm profile, 48 mm legs','Rubberized non-slip feet','Triple-layer premium PVC upholstery','Wing-nut secured backrest panels','Custom paint and fabric colors','Optional automatic platform configurations']}},{id:'armwrestling-attachments',price:5000,from:true,imgs:['https://ireland.apollo.olxcdn.com:443/v1/files/fvmcb79qmgcl2-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/vc0cf5mrcdip-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/0ou025sssv9o2-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/l3gzo3cay4lv2-UA/image','https://ireland.apollo.olxcdn.com:443/v1/files/jdrnyd32qx6x-UA/image'],olx:'https://www.olx.ua/d/uk/obyavlenie/stoly-trenazhery-pristavki-dlya-armrestlinga-IDVUJGs.html',ua:{nm:'Столи, тренажери та приставки для армрестлингу',sd:'Широкий вибір обладнання для армрестлингу власного виробництва',de:'Широкий вибір обладнання для армрестлингу та пауерліфтингу власного виробництва. В асортименті: посилені змагальні столи, стандартні столи, столи з автоматичними платформами, різні приставки, механічні тренажери для рук.',fl:['Змагальні та стандартні столи','Столи з автоматичними платформами','Різні види приставок','Механічні тренажери для рук','Підшипникові з\'єднання','Виготовлення під специфікацію']},ru:{nm:'Столы, тренажёры и приставки для армрестлинга',sd:'Широкий выбор оборудования для армрестлинга собственного производства',de:'Широкий выбор оборудования для армрестлинга и пауэрлифтинга собственного производства. В ассортименте: усиленные соревновательные столы, стандартные столы, столы с автоматическими платформами, различные приставки, механические тренажёры для рук.',fl:['Соревновательные и стандартные столы','Столы с автоматическими платформами','Различные виды приставок','Механические тренажёры для рук','Подшипниковые соединения','Изготовление под спецификацию']},en:{nm:'Armwrestling Tables, Machines & Attachments',sd:'Wide selection of in-house manufactured armwrestling equipment',de:'Wide selection of armwrestling and powerlifting equipment from own production. Range includes reinforced competition tables, standard tables, tables with automatic platforms, various attachments and mechanical arm trainers.',fl:['Competition and standard tables','Tables with automatic platforms','Various attachment types','Mechanical arm trainers','Bearing joint construction','Custom manufacturing available']}}];
+const SUN='<circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>';
+const MOON='<path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/>';
+let lang=localStorage.getItem('os-lang')||'ua';
+let theme=localStorage.getItem('os-theme')||'dark';
+let page='home',productId=null,galIdx=0,formSubmitted=false;
+function t(path){const parts=path.split('.');let o=T[lang];for(const p of parts)o=o?.[p];return o||path}
+function fmtPrice(p,from,l){const n=Number(p).toLocaleString('uk-UA');return from?`${T[l].prod.frm} ${n} ${T[l].prod.uah}`:`${n} ${T[l].prod.uah}`}
+function setTxt(id,v){const el=document.getElementById(id);if(el)el.textContent=v}
+function setHTML(id,v){const el=document.getElementById(id);if(el)el.innerHTML=v}
+function applyTheme(){
+  document.documentElement.dataset.theme=theme;
+  const isDark=theme==='dark';
+  const svg=isDark?SUN:MOON;
+  const ti=document.getElementById('theme-icon');const mti=document.getElementById('mob-theme-icon');
+  if(ti)ti.innerHTML=svg;if(mti)mti.innerHTML=svg;
+  setTxt('mob-theme-label',isDark?t('theme.toLight'):t('theme.toDark'));
+}
+function toggleTheme(){theme=theme==='dark'?'light':'dark';localStorage.setItem('os-theme',theme);applyTheme();}
+function toggleLangDrop(){document.getElementById('ldrop-panel').classList.toggle('open');document.getElementById('ldrop-btn').classList.toggle('open');}
+function closeLangDrop(){document.getElementById('ldrop-panel').classList.remove('open');document.getElementById('ldrop-btn').classList.remove('open');}
+document.addEventListener('click',e=>{if(!e.target.closest('.ldrop'))closeLangDrop();});
+function toggleMob(){document.getElementById('mob').classList.toggle('open')}
+function closeMob(){document.getElementById('mob').classList.remove('open')}
+function render(){
+  document.documentElement.lang=lang;
+  document.querySelectorAll('[data-page]').forEach(el=>{const pg=el.dataset.page;el.textContent=pg==='home'?t('nav.home'):pg==='equipment'?t('nav.eq'):t('nav.con');});
+  document.getElementById('ldrop-cur').textContent=lang.toUpperCase();
+  document.querySelectorAll('.ldrop-item').forEach(b=>b.classList.toggle('on',b.dataset.l===lang));
+  document.querySelectorAll('.mob-lang-item').forEach(b=>b.classList.toggle('on',b.dataset.ml===lang));
+  setTxt('ft-home',t('nav.home'));setTxt('ft-equip',t('nav.eq'));setTxt('ft-con',t('nav.con'));setTxt('ft-copy',t('foot'));
+  applyTheme();renderHome();renderEquipment();renderDetail();renderContacts();showPage();
+}
+function productCard(p){const pd=p[lang];const pr=fmtPrice(p.price,p.from,lang);return`<div class="pcard" onclick="openProduct('${p.id}')"><div class="pc-img"><img src="${p.imgs[0]}" alt="${pd.nm}" loading="lazy"></div><div class="pc-body"><div class="pc-nm">${pd.nm}</div><div class="pc-ds">${pd.sd}</div><div class="pc-ft"><span class="pc-pr">${pr}</span><span class="pc-ar">→</span></div></div></div>`;}
+function renderHome(){
+  setTxt('h-ey',t('hero.ey'));setHTML('h-title',t('hero.h'));setTxt('h-sub',t('hero.sub'));setTxt('h-cta',t('hero.cta'));setTxt('h-cta2',t('hero.cta2'));
+  setHTML('stats-row',t('stats').map(s=>`<div class="st"><div class="st-nb">${s.nb}</div><div class="st-lb">${s.lb}</div></div>`).join(''));
+  setTxt('ab-label',t('ab.lb'));setHTML('ab-title',t('ab.h'));setTxt('ab-p1',t('ab.p1'));setTxt('ab-p2',t('ab.p2'));
+  const fi=['<path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>','<path d="M12 20h9M16.5 3.5a2.121 2.121 0 013 3L7 19l-4 1 1-4L16.5 3.5z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>','<rect x="3" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="3" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="3" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/><rect x="14" y="14" width="7" height="7" rx="1" stroke="currentColor" stroke-width="1.5"/>'];
+  setHTML('feats-row',t('feats').map((f,i)=>`<div class="fc"><div class="fc-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none">${fi[i]}</svg></div><div class="fc-nm">${f.nm}</div><div class="fc-de">${f.de}</div></div>`).join(''));
+  setTxt('feat-title',t('feat.t'));setTxt('feat-lk',t('feat.lk'));
+  setHTML('home-products',PRODS.slice(0,3).map(p=>productCard(p)).join(''));
+}
+function renderEquipment(){setTxt('eq-title',t('eq.t'));setTxt('eq-sub',t('eq.s'));setHTML('all-products',PRODS.map(p=>productCard(p)).join(''));}
+function renderDetail(){
+  if(!productId)return;const p=PRODS.find(x=>x.id===productId);if(!p)return;
+  const pd=p[lang];const tp=T[lang].prod;
+  setTxt('bc-home',tp.bhome);setTxt('bc-equip',tp.beq);setTxt('bc-name',pd.nm);
+  setTxt('det-badge',tp.bdg);setTxt('det-name',pd.nm);
+  document.getElementById('det-price').textContent=fmtPrice(p.price,p.from,lang);
+  setHTML('det-desc',`<p>${pd.de}</p>`);setHTML('det-feats',pd.fl.map(f=>`<li>${f}</li>`).join(''));
+  setTxt('det-order',tp.ord);setTxt('det-custom',tp.cust);document.getElementById('det-olx').href=p.olx;
+  galIdx=0;renderGallery(p);
+}
+function renderGallery(p){
+  document.getElementById('gal-main-img').src=p.imgs[galIdx];document.getElementById('gal-main-img').alt=p[lang].nm;
+  setHTML('gal-thumbs',p.imgs.map((img,i)=>`<div class="g-th${i===galIdx?' on':''}" onclick="setGal(${i})"><img src="${img}" loading="lazy"></div>`).join(''));
+}
+function setGal(i){
+  const p=PRODS.find(x=>x.id===productId);if(!p)return;galIdx=i;
+  const mi=document.getElementById('gal-main-img');mi.style.opacity='0.4';
+  setTimeout(()=>{mi.src=p.imgs[i];mi.style.opacity='1';},120);
+  document.querySelectorAll('.g-th').forEach((el,idx)=>el.classList.toggle('on',idx===i));
+}
+function renderContacts(){
+  setTxt('con-badge',t('con.badge'));setTxt('con-title',t('con.t'));setTxt('con-sub',t('con.s'));setTxt('con-olx-btn',t('con.olx'));
+  const pi=['<path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>','<path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>','<circle cx="12" cy="12" r="10"/><path d="M8 14s1.5 2 4 2 4-2 4-2"/><line x1="9" y1="9" x2="9.01" y2="9"/><line x1="15" y1="9" x2="15.01" y2="9"/>'];
+  setHTML('con-pts',t('con.pts').map((p,i)=>`<div class="cp"><div class="cp-ic"><svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">${pi[i]}</svg></div><div><div class="cp-t">${p.t}</div><div class="cp-d">${p.d}</div></div></div>`).join(''));
+  const suc=document.getElementById('cf-success');const flds=document.getElementById('cf-fields');
+  if(suc)suc.style.display=formSubmitted?'block':'none';
+  if(flds)flds.style.display=formSubmitted?'none':'block';
+  if(formSubmitted){setTxt('cf-ok-t',t('con.form.ok'));setTxt('cf-ok-s',t('con.form.okSub'));return;}
+  setTxt('cf-lb-name',t('con.form.name'));const ni=document.getElementById('cf-name');if(ni)ni.placeholder=t('con.form.namePh');
+  setTxt('cf-lb-phone',t('con.form.phone'));const phi=document.getElementById('cf-phone');if(phi)phi.placeholder=t('con.form.phonePh');
+  setTxt('cf-lb-method',t('con.form.method'));
+  setHTML('cf-methods',t('con.form.methods').map((m,i)=>`<div class="cr"><input type="radio" name="cf-method" id="cf-m${i}" value="${m}"${i===0?' checked':''}><label for="cf-m${i}"><span class="cr-dot"></span>${m}</label></div>`).join(''));
+  setTxt('cf-lb-msg',t('con.form.msg'));const mi=document.getElementById('cf-msg');if(mi)mi.placeholder=t('con.form.msgPh');
+  setTxt('cf-submit',t('con.form.submit'));
+}
+function submitForm(){
+  const ne=document.getElementById('cf-name');const pe=document.getElementById('cf-phone');let ok=true;
+  [ne,pe].forEach(el=>{if(!el||!el.value.trim()){if(el)el.classList.add('err');ok=false;}else el.classList.remove('err');});
+  if(!ok)return;formSubmitted=true;renderContacts();
+}
+function showPage(){
+  document.querySelectorAll('.page').forEach(el=>el.classList.remove('on'));
+  document.getElementById('pg-'+(productId?'product':page))?.classList.add('on');
+  window.scrollTo({top:0,behavior:'instant'});
+  document.querySelectorAll('[data-page]').forEach(el=>el.classList.toggle('on',productId?el.dataset.page==='equipment':el.dataset.page===page));
+}
+function goto(pg){page=pg;productId=null;if(pg!=='contacts')formSubmitted=false;location.hash=pg==='home'?'':pg;render();}
+function openProduct(id){productId=id;page='equipment';location.hash='product/'+id;render();}
+function setLang(l){lang=l;localStorage.setItem('os-lang',l);render();}
+function handleHash(){const h=location.hash.replace('#','');if(!h||h==='home'){page='home';productId=null;}else if(h.startsWith('product/')){productId=h.replace('product/','');page='equipment';}else{page=h;productId=null;}}
+handleHash();render();
+window.addEventListener('hashchange',()=>{handleHash();render();});
+</script>
+</body>
+</html>
